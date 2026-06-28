@@ -17,12 +17,16 @@ import json
 import requests
 import pandas as pd
 import numpy as np
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # ─────────────────────────────────────────────────────────────
 # CONFIGURATION
 # ─────────────────────────────────────────────────────────────
 
-GROK_API_KEY = ""
+GROK_API_KEY = os.getenv("GROK_API_KEY", "")
 GROK_API_URL = "https://api.x.ai/v1/chat/completions"
 GROK_MODEL = "grok-beta"
 
@@ -286,8 +290,7 @@ def call_grok_api(prompt, system_prompt=None, max_tokens=2048):
     """
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {
-            _API_KEY}",
+        "Authorization": f"Bearer {GROK_API_KEY}",
     }
 
     messages = []
