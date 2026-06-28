@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="User Dashboard - Manage your loans and KYC">
+    <meta name="keywords" content="dashboard, loans, KYC, banking">
+    
+    <title>
+        {% block title %}
+        User Dashboard
+        {% endblock %}
+    </title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts - Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Files -->
+    {% load static %}
+    
+    <!-- Main Dashboard CSS -->
+    <link rel="stylesheet" href="{% static 'Banker/css/user_dashboard.css' %}">
+    
+    <!-- Page Specific CSS -->
+    {% block extra_css %}
+    {% endblock %}
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'Banker/images/favicon.ico' %}">
+    
+    <!-- Additional Meta Tags -->
+    {% block meta %}
+    {% endblock %}
+</head>
+
+<body>
+    <!-- Header Section -->
+    {% include "User/header.html" %}
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Messages/Notifications -->
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="message-item {% if message.tags %}{{ message.tags }}{% endif %}">
+                <i class="fas 
+                    {% if message.tags == 'success' %}fa-check-circle
+                    {% elif message.tags == 'error' %}fa-exclamation-circle
+                    {% elif message.tags == 'warning' %}fa-exclamation-triangle
+                    {% elif message.tags == 'info' %}fa-info-circle
+                    {% else %}fa-bell{% endif %}">
+                </i>
+                <span class="message-content">{{ message }}</span>
+                <button class="message-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Page Content -->
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer Section -->
+    {% include "User/footer.html" %}
+
+    <!-- JavaScript Files -->
+    
+    <!-- jQuery (if needed) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Main Dashboard JavaScript -->
+    <script src="{% static 'Banker/js/user_dashboard.js' %}"></script>
+    
+
+</body>
+</html>

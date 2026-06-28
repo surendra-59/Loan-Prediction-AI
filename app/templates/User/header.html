@@ -1,0 +1,44 @@
+
+
+
+<header class="header">
+
+    <!-- Left Side Menu -->
+    <div class="header-left">
+
+        <span class="logo">
+            Loan Prediction
+        </span>
+
+        <a href="{% url 'user_dashboard' %}" class="nav-link">
+            Dashboard
+        </a>
+
+        <a href="{% url 'apply_loan' %}" class="nav-link">
+            Apply Loan
+        </a>
+
+    </div>
+
+    <!-- Right Side User Profile -->
+    <div class="header-right">
+
+        {% if kyc and kyc.photograph %}
+        <img src="{{ kyc.photograph.url }}" class="profile-img">
+        {% endif %}
+
+        <span class="user-name">
+            {{ request.user.full_name }}
+        </span>
+
+        {% if kyc and kyc.status == "Approved" %}
+        <span class="verified">✔</span>
+        {% endif %}
+
+        <a href="{% url 'logout' %}" class="logout-link">
+            Logout
+        </a>
+
+    </div>
+
+</header>

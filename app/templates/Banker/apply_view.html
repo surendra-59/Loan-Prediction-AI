@@ -1,0 +1,99 @@
+{% extends "Banker/base.html" %}
+
+{% block title %}Loan Applications{% endblock %}
+
+{% block content %}
+<h2>Loan Applications Dashboard</h2>
+
+<!-- Display messages -->
+{% if messages %}
+{% for message in messages %}
+<p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %};">
+    {{ message }}
+</p>
+{% endfor %}
+{% endif %}
+
+<!-- Statistics summary -->
+<div style="margin-bottom: 20px; display: flex; gap: 20px;">
+    <div style="padding: 10px; background: #007bff; color: white; border-radius: 5px;">
+        Total Applicants: {{ total_applicants }}
+    </div>
+    <div style="padding: 10px; background: #28a745; color: white; border-radius: 5px;">
+        New / Pending: {{ new_applicants }}
+    </div>
+</div>
+
+<!-- Search bar -->
+<form method="get" style="margin-bottom: 20px;">
+    <input type="text" name="q" placeholder="Search by user name or email" value="{{ request.GET.q|default:'' }}"
+        style="padding: 5px 10px; width: 250px; border-radius: 4px; border: 1px solid #ccc;">
+    <button type="submit"
+        style="padding: 5px 10px; background: #007bff; color: white; border: none; border-radius: 4px;">Search</button>
+    {% if request.GET.q %}
+    <a href="{% url 'banker_dashboard' %}" style="margin-left: 10px; text-decoration: none; color: #555;">Clear</a>
+    {% endif %}
+</form>
+
+<!-- Loan Applicants Table -->
+{% if loans %}
+<table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+    <thead>
+        <tr style="background-color: #007bff; color: white;">
+            <th>User</th>
+            <th>Loan Amount</th>
+            <th>Status</th>
+            <th>Prediction</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for loan in loans %}
+        <tr>
+            <td>{{ loan.user.full_name }} <br><small>{{ loan.user.email }}</small></td>
+            <td>Rs {{ loan.loan_amount }}</td>
+            <td>
+                {% if loan.status == "Approved" %}
+                <span style="color: blue; font-weight: bold;">✔ Approved</span>
+                {% elif loan.status == "Rejected" %}
+                <span style="color: red; font-weight: bold;">❌ Rejected</span>
+                {% else %}
+                <span style="color: orange; font-weight: bold;">⏳ Pending</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if loan.prediction_result %}
+                {{ loan.prediction_result }} <small>({{ loan.prediction_probability|floatformat:2 }})</small>
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+            <td>
+                <a href="#"
+                    style="padding: 5px 10px; background: #333; color: white; text-decoration: none; border-radius: 4px;">
+                    View Details
+                </a>
+
+                {% if loan.status == "Pending" %}
+                <a href="{% url 'approve_loan' loan.id %}"
+                    style="padding: 5px 10px; background: green; color: white; text-decoration: none; border-radius: 4px; margin-left: 5px;">
+                    Approve
+                </a>
+
+                <a href="{% url 'reject_loan' loan.id %}"
+                    style="padding: 5px 10px; background: red; color: white; text-decoration: none; border-radius: 4px; margin-left: 5px;">
+                    Reject
+                </a>
+                {% else %}
+                <span style="color: gray; margin-left: 10px;">No Actions</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No loan applications found.</p>
+{% endif %}
+
+{% endblock %}

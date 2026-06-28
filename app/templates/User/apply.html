@@ -1,0 +1,601 @@
+{% extends "User/base.html" %}
+
+{% block title %}Apply for Loan{% endblock %}
+
+{% block content %}
+<div class="loan-application-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-icon">
+            <i class="fas fa-hand-holding-usd"></i>
+        </div>
+        <div class="header-title">
+            <h1>Loan Application</h1>
+            <p>Fill in your details to apply for a loan</p>
+        </div>
+    </div>
+
+    <!-- Progress Tracker -->
+    <div class="progress-tracker">
+        <div class="progress-step active">
+            <div class="step-number">1</div>
+            <div class="step-label">Personal Info</div>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step">
+            <div class="step-number">2</div>
+            <div class="step-label">Employment</div>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step">
+            <div class="step-number">3</div>
+            <div class="step-label">Additional</div>
+        </div>
+    </div>
+
+    <!-- Main Form -->
+    <form method="POST" class="loan-form" id="loanForm">
+        {% csrf_token %}
+        
+        <!-- Personal Information Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-user-circle"></i>
+                <h3>Personal Information</h3>
+            </div>
+            
+            <div class="form-grid">
+                <!-- Age Field -->
+                <div class="form-group">
+                    <label for="age">
+                        <i class="fas fa-birthday-cake"></i>
+                        Age
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" 
+                               id="age"
+                               name="Age" 
+                               min="18" 
+                               max="69" 
+                               required
+                               placeholder="Enter your age">
+                        <span class="input-hint">18 - 69 years</span>
+                    </div>
+                </div>
+
+                <!-- Income Field -->
+                <div class="form-group">
+                    <label for="income">
+                        <i class="fas fa-rupee-sign"></i>
+                        Annual Income
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" 
+                               id="income"
+                               name="Income" 
+                               min="200000" 
+                               required
+                               placeholder="Minimum ₹2,00,000">
+                        <span class="input-hint">Minimum ₹2,00,000</span>
+                    </div>
+                </div>
+
+                <!-- Loan Amount Field -->
+                <div class="form-group">
+                    <label for="loanAmount">
+                        <i class="fas fa-coins"></i>
+                        Loan Amount
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" 
+                               id="loanAmount"
+                               name="LoanAmount" 
+                               min="50000" 
+                               required
+                               placeholder="Minimum ₹50,000">
+                        <span class="input-hint">Minimum ₹50,000</span>
+                    </div>
+                </div>
+
+                <!-- Credit Score Field -->
+                <div class="form-group">
+                    <label for="creditScore">
+                        <i class="fas fa-chart-line"></i>
+                        Credit Score
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" 
+                               id="creditScore"
+                               name="CreditScore" 
+                               min="0" 
+                               max="1000" 
+                               required
+                               placeholder="0 - 1000">
+                        <span class="input-hint">Range: 0 - 1000</span>
+                    </div>
+                </div>
+
+                <!-- Months Employed Field -->
+                <div class="form-group">
+                    <label for="monthsEmployed">
+                        <i class="fas fa-briefcase"></i>
+                        Months Employed
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" 
+                               id="monthsEmployed"
+                               name="MonthsEmployed" 
+                               min="0" 
+                               required
+                               placeholder="Total months employed">
+                    </div>
+                </div>
+
+                <!-- Credit Lines Field -->
+                <div class="form-group">
+                    <label for="numCreditLines">
+                        <i class="fas fa-credit-card"></i>
+                        Number of Credit Lines
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" 
+                               id="numCreditLines"
+                               name="NumCreditLines" 
+                               min="0" 
+                               required
+                               placeholder="Total credit lines">
+                    </div>
+                </div>
+
+                <!-- Interest Rate Field -->
+                <div class="form-group">
+                    <label for="interestRate">
+                        <i class="fas fa-percent"></i>
+                        Interest Rate
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" 
+                               id="interestRate"
+                               step="0.1" 
+                               name="InterestRate" 
+                               min="0" 
+                               max="18" 
+                               required
+                               placeholder="0% - 18%">
+                        <span class="input-hint">Maximum 18%</span>
+                    </div>
+                </div>
+
+                <!-- Loan Term Field -->
+                <div class="form-group">
+                    <label for="loanTerm">
+                        <i class="fas fa-calendar-alt"></i>
+                        Loan Term (Months)
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" 
+                               id="loanTerm"
+                               name="LoanTerm" 
+                               min="12" 
+                               required
+                               placeholder="Minimum 12 months">
+                        <span class="input-hint">Minimum 12 months</span>
+                    </div>
+                </div>
+
+                <!-- DTI Ratio Field -->
+                <div class="form-group full-width">
+                    <label for="dtiRatio">
+                        <i class="fas fa-balance-scale"></i>
+                        Debt-to-Income Ratio
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" 
+                               id="dtiRatio"
+                               step="0.01" 
+                               name="DTIRatio" 
+                               min="0" 
+                               max="1" 
+                               required
+                               placeholder="0.00 - 1.00">
+                        <span class="input-hint">Range: 0 - 1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employment & Education Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>Employment & Education</h3>
+            </div>
+
+            <div class="form-grid">
+                <!-- Education Field -->
+                <div class="form-group">
+                    <label for="education">
+                        <i class="fas fa-university"></i>
+                        Education Level
+                    </label>
+                    <div class="select-wrapper">
+                        <select name="Education" id="education" required>
+                            <option value="" disabled selected>Select education level</option>
+                            <option value="High School">High School</option>
+                            <option value="Bachelor's">Bachelor's Degree</option>
+                            <option value="Master's">Master's Degree</option>
+                            <option value="PhD">PhD</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+
+                <!-- Employment Type Field -->
+                <div class="form-group">
+                    <label for="employmentType">
+                        <i class="fas fa-building"></i>
+                        Employment Type
+                    </label>
+                    <div class="select-wrapper">
+                        <select name="EmploymentType" id="employmentType" required>
+                            <option value="" disabled selected>Select employment type</option>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Self-employed">Self-employed</option>
+                            <option value="Unemployed">Unemployed</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+
+                <!-- Marital Status Field -->
+                <div class="form-group">
+                    <label for="maritalStatus">
+                        <i class="fas fa-heart"></i>
+                        Marital Status
+                    </label>
+                    <div class="select-wrapper">
+                        <select name="MaritalStatus" id="maritalStatus" required>
+                            <option value="" disabled selected>Select marital status</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Information Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-info-circle"></i>
+                <h3>Additional Information</h3>
+            </div>
+
+            <div class="form-grid">
+                <!-- Has Mortgage Field -->
+                <div class="form-group">
+                    <label for="hasMortgage">
+                        <i class="fas fa-home"></i>
+                        Has Mortgage?
+                    </label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="HasMortgage" value="Yes" required>
+                            <span class="radio-custom"></span>
+                            Yes
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="HasMortgage" value="No" required>
+                            <span class="radio-custom"></span>
+                            No
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Has Dependents Field -->
+                <div class="form-group">
+                    <label for="hasDependents">
+                        <i class="fas fa-users"></i>
+                        Has Dependents?
+                    </label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="HasDependents" value="Yes" required>
+                            <span class="radio-custom"></span>
+                            Yes
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="HasDependents" value="No" required>
+                            <span class="radio-custom"></span>
+                            No
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Has Co-Signer Field -->
+                <div class="form-group">
+                    <label for="hasCoSigner">
+                        <i class="fas fa-handshake"></i>
+                        Has Co-Signer?
+                    </label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="HasCoSigner" value="Yes" required>
+                            <span class="radio-custom"></span>
+                            Yes
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="HasCoSigner" value="No" required>
+                            <span class="radio-custom"></span>
+                            No
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <button type="reset" class="btn btn-secondary">
+                <i class="fas fa-undo"></i>
+                Reset
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i>
+                Submit Application
+            </button>
+        </div>
+    </form>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- EXPLAINABLE AI RESULTS SECTION                        -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    {% if prediction %}
+    <div class="xai-results-container" id="xaiResults">
+
+        <!-- 1. Prediction Result Card -->
+        <div class="xai-card prediction-card">
+            <div class="xai-card-header">
+                <i class="fas fa-chart-pie"></i>
+                <h3>Loan Prediction Result</h3>
+            </div>
+            <div class="prediction-content">
+                <div class="prediction-badge {% if prediction == 'Low Risk' %}approved{% else %}rejected{% endif %}">
+                    <i class="fas {% if prediction == 'Low Risk' %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i>
+                    {{ prediction }}
+                </div>
+                <div class="risk-meter">
+                    <div class="risk-label">
+                        <span>Risk Probability</span>
+                        <span>{{ probability_pct }}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ probability_pct }}%;
+                             background: {% if probability_pct < 30 %}#10b981{% elif probability_pct < 60 %}#f59e0b{% else %}#ef4444{% endif %};"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if xai_available %}
+
+        <!-- 2. Financial Health Score -->
+        {% if health_score %}
+        <div class="xai-card health-card">
+            <div class="xai-card-header">
+                <i class="fas fa-heartbeat"></i>
+                <h3>Financial Health Score</h3>
+            </div>
+            <div class="health-content">
+                <div class="health-main">
+                    <div class="health-circle">
+                        <svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="52" fill="none" stroke="#2d2d3d" stroke-width="10"/>
+                            <circle cx="60" cy="60" r="52" fill="none"
+                                stroke="{% if health_score.score >= 65 %}#10b981{% elif health_score.score >= 45 %}#f59e0b{% else %}#ef4444{% endif %}"
+                                stroke-width="10" stroke-linecap="round"
+                                stroke-dasharray="{{ health_score.score|floatformat:0 }}% 999"
+                                transform="rotate(-90 60 60)"/>
+                        </svg>
+                        <div class="health-score-text">
+                            <span class="score-num">{{ health_score.score|floatformat:0 }}</span>
+                            <span class="score-label">/ 100</span>
+                        </div>
+                    </div>
+                    <div class="health-grade {% if health_score.score >= 65 %}grade-good{% elif health_score.score >= 45 %}grade-fair{% else %}grade-poor{% endif %}">
+                        {{ health_score.grade }}
+                    </div>
+                </div>
+                <div class="health-breakdown">
+                    {% for item in health_breakdown %}
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">{{ item.component }}</span>
+                        <div class="breakdown-bar-wrap">
+                            <div class="breakdown-bar" style="width: {{ item.bar_width }}%;
+                                background: {% if item.score >= 65 %}#10b981{% elif item.score >= 45 %}#f59e0b{% else %}#ef4444{% endif %};"></div>
+                        </div>
+                        <span class="breakdown-score">{{ item.score }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- 3. Key Factors (SHAP) -->
+        {% if feature_impacts %}
+        <div class="xai-card factors-card">
+            <div class="xai-card-header">
+                <i class="fas fa-search-dollar"></i>
+                <h3>Key Factors in This Decision</h3>
+            </div>
+            <div class="factors-table-wrap">
+                <table class="factors-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Your Value</th>
+                            <th>Risk Rating</th>
+                            <th>Impact</th>
+                            <th>Influence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for f in feature_impacts %}
+                        <tr class="{% if f.is_risk %}row-risk{% else %}row-safe{% endif %}">
+                            <td><strong>{{ f.feature }}</strong></td>
+                            <td>{{ f.value }}</td>
+                            <td>{{ f.risk }}</td>
+                            <td><code>{{ f.impact }}</code></td>
+                            <td>{{ f.influence }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- 4. Counterfactual Suggestions -->
+        {% if cf_changes %}
+        <div class="xai-card cf-card">
+            <div class="xai-card-header">
+                <i class="fas fa-lightbulb"></i>
+                <h3>Recommended Changes to Improve Eligibility</h3>
+            </div>
+            <p class="cf-subtitle">These changes could reduce your risk from <strong>{{ cf_original_prob }}</strong> → <strong>{{ cf_new_prob }}</strong></p>
+            <div class="factors-table-wrap">
+                <table class="factors-table cf-table">
+                    <thead>
+                        <tr>
+                            <th>What to Change</th>
+                            <th>Current</th>
+                            <th>Recommended</th>
+                            <th>Change</th>
+                            <th>Effort</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in cf_changes %}
+                        <tr>
+                            <td><strong>{{ c.feature }}</strong></td>
+                            <td>{{ c.original }}</td>
+                            <td class="val-suggested">{{ c.suggested }}</td>
+                            <td>{{ c.change }}</td>
+                            <td><span class="effort-badge effort-{{ c.effort_class }}">{{ c.effort }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- 5. AI Advisor's Analysis (NLP) -->
+        {% if nlp_explanation %}
+        <div class="xai-card nlp-card">
+            <div class="xai-card-header">
+                <i class="fas fa-robot"></i>
+                <h3>AI Advisor's Analysis</h3>
+            </div>
+            <div class="nlp-content">
+                {{ nlp_explanation|linebreaksbr }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% endif %}{# end xai_available #}
+
+        <div class="xai-actions">
+            <a href="{% url 'user_dashboard' %}" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <a href="{% url 'apply_loan' %}" class="btn btn-secondary">
+                <i class="fas fa-redo"></i> Apply Again
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- XAI Results Styles -->
+<style>
+.xai-results-container{margin-top:2rem;animation:fadeInUp .6s ease}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.xai-card{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.8rem;margin-bottom:1.5rem;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.xai-card-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.xai-card-header i{font-size:1.4rem;color:#818cf8}
+.xai-card-header h3{margin:0;font-size:1.15rem;color:#e2e8f0;font-weight:600}
+.prediction-content{text-align:center}
+.prediction-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 2rem;border-radius:50px;font-size:1.2rem;font-weight:700;margin-bottom:1.2rem}
+.prediction-badge.approved{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.3)}
+.prediction-badge.rejected{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.risk-meter{max-width:400px;margin:0 auto}
+.risk-label{display:flex;justify-content:space-between;margin-bottom:.5rem;color:#94a3b8;font-size:.9rem}
+.progress-bar{height:10px;background:#2d2d3d;border-radius:10px;overflow:hidden}
+.progress-fill{height:100%;border-radius:10px;transition:width 1.2s ease}
+/* Health Score */
+.health-content{display:flex;gap:2rem;align-items:center;flex-wrap:wrap}
+.health-main{display:flex;flex-direction:column;align-items:center;min-width:140px}
+.health-circle{position:relative;width:120px;height:120px}
+.health-circle svg{width:100%;height:100%}
+.health-score-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.score-num{font-size:1.8rem;font-weight:800;color:#e2e8f0}
+.score-label{display:block;font-size:.7rem;color:#64748b}
+.health-grade{margin-top:.5rem;padding:.3rem 1rem;border-radius:20px;font-weight:700;font-size:.85rem}
+.grade-good{background:rgba(16,185,129,.15);color:#34d399}
+.grade-fair{background:rgba(245,158,11,.15);color:#fbbf24}
+.grade-poor{background:rgba(239,68,68,.15);color:#f87171}
+.health-breakdown{flex:1;min-width:250px}
+.breakdown-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
+.breakdown-label{width:140px;font-size:.85rem;color:#94a3b8;flex-shrink:0}
+.breakdown-bar-wrap{flex:1;height:8px;background:#2d2d3d;border-radius:8px;overflow:hidden}
+.breakdown-bar{height:100%;border-radius:8px;transition:width 1s ease}
+.breakdown-score{width:35px;text-align:right;font-size:.85rem;color:#e2e8f0;font-weight:600}
+/* Factors Table */
+.factors-table-wrap{overflow-x:auto}
+.factors-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.factors-table th{padding:.7rem .6rem;text-align:left;color:#818cf8;font-weight:600;border-bottom:2px solid rgba(129,140,248,.2);white-space:nowrap}
+.factors-table td{padding:.65rem .6rem;border-bottom:1px solid rgba(255,255,255,.05);color:#cbd5e1}
+.factors-table code{background:rgba(129,140,248,.1);padding:.15rem .4rem;border-radius:4px;font-size:.82rem;color:#a5b4fc}
+.row-risk td:first-child{border-left:3px solid #ef4444}
+.row-safe td:first-child{border-left:3px solid #10b981}
+/* Counterfactual */
+.cf-subtitle{color:#94a3b8;font-size:.9rem;margin-bottom:1rem}
+.cf-subtitle strong{color:#818cf8}
+.val-suggested{color:#34d399;font-weight:600}
+.effort-badge{padding:.2rem .6rem;border-radius:12px;font-size:.78rem;font-weight:600}
+.effort-easy{background:rgba(16,185,129,.15);color:#34d399}
+.effort-moderate{background:rgba(245,158,11,.15);color:#fbbf24}
+.effort-significant{background:rgba(239,68,68,.15);color:#f87171}
+/* NLP Card */
+.nlp-content{color:#cbd5e1;line-height:1.7;font-size:.92rem;padding:1rem;background:rgba(0,0,0,.2);border-radius:10px;border:1px solid rgba(255,255,255,.05)}
+/* Actions */
+.xai-actions{display:flex;gap:1rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+.xai-actions .btn{padding:.7rem 1.5rem;border-radius:10px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:all .3s}
+.xai-actions .btn-primary{background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff}
+.xai-actions .btn-secondary{background:rgba(255,255,255,.06);color:#94a3b8;border:1px solid rgba(255,255,255,.1)}
+.xai-actions .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(99,102,241,.3)}
+@media(max-width:640px){.health-content{flex-direction:column}.breakdown-label{width:110px}.factors-table{font-size:.8rem}}
+</style>
+
+<!-- Form Validation Script -->
+<script>
+document.getElementById('loanForm').addEventListener('submit', function(e) {
+    const age = document.getElementById('age').value;
+    const income = document.getElementById('income').value;
+    const creditScore = document.getElementById('creditScore').value;
+    if (age < 18 || age > 69) { e.preventDefault(); alert('Age must be between 18 and 69 years'); }
+    if (income < 200000) { e.preventDefault(); alert('Annual income must be at least ₹2,00,000'); }
+    if (creditScore < 0 || creditScore > 1000) { e.preventDefault(); alert('Credit score must be between 0 and 1000'); }
+});
+{% if prediction %}
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('xaiResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+{% endif %}
+</script>
+{% endblock %}

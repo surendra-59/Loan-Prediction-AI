@@ -1,0 +1,87 @@
+
+{% extends "Banker/base.html" %}
+
+
+{% block title %}KYC Applications{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2>KYC Applications</h2>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p class="message {{ message.tags }}">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if kyc_list %}
+
+    <div class="table-responsive">
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for kyc in kyc_list %}
+                    <tr>
+                        <td>
+                            {{ kyc.user.full_name }}
+                        </td>
+
+                        <td>
+                            {% if kyc.status == "Approved" %}
+                                <span class="status approved">Approved</span>
+                            {% elif kyc.status == "Rejected" %}
+                                <span class="status rejected">Rejected</span>
+                            {% else %}
+                                <span class="status pending">Pending</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <a href="{% url 'view_kyc' kyc.id %}" class="btn view">
+                                View
+                            </a>
+
+                            {% if kyc.status == "Pending" %}
+                                <a href="{% url 'update_kyc_status' kyc.id 'approve' %}" class="btn approve">
+                                    Approve
+                                </a>
+                                <a href="{% url 'update_kyc_status' kyc.id 'reject' %}" class="btn reject">
+                                    Reject
+                                </a>
+                            {% else %}
+                                <span class="no-action">
+                                    No Actions
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% else %}
+
+    <p>No KYC applications found.</p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

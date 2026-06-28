@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Font Awesome for icons (required for your CSS) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Your external CSS -->
+    <link rel="stylesheet" href="{% static 'Banker/css/style.css' %}">
+    
+    
+    <title>{% block title %}Loan Prediction System{% endblock %}</title>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header>
+    <div class="header-container">
+        <div class="header-left">
+            <section>
+                <div class="logo-icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>🏦 Loan Prediction System</h1>
+                    <p>Banker Management Portal</p>
+                </div>
+            </section>
+        </div>
+
+        <nav>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'banker_dashboard' %}">
+                    <i class="fas fa-chart-pie"></i>
+                    Dashboard
+                </a>
+                <a href="{% url 'kyc_applications' %}">
+                    <i class="fas fa-file-signature"></i>
+                    KYC Applications
+                </a>
+                <a href="{% url 'loan_applications' %}">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    Loan Applications
+                </a>
+                <a href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+
+                <span>
+                    <i class="fas fa-user-circle"></i>
+                    {{ request.user.full_name|default:request.user.email }}
+                </span>
+            {% else %}
+                <a href="{% url 'login' %}">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </a>
+                <a href="{% url 'register' %}">
+                    <i class="fas fa-user-plus"></i>
+                    Register
+                </a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<!-- ================= SYSTEM MESSAGES ================= -->
+{% if messages %}
+<section class="messages-container">
+    {% for message in messages %}
+        <p class="{{ message.tags }}">
+            <i class="fas 
+                {% if message.tags == 'success' %}fa-check-circle
+                {% elif message.tags == 'error' %}fa-exclamation-circle
+                {% else %}fa-info-circle
+                {% endif %}">
+            </i>
+            {{ message }}
+        </p>
+    {% endfor %}
+</section>
+{% endif %}
+
+<!-- ================= MAIN PAGE CONTENT ================= -->
+<main>
+    {% block content %}
+    <!-- Default Dashboard Content (will be overridden by child templates) -->
+    <h2>Banker Dashboard</h2>
+    <p>Welcome {{ request.user.full_name }}</p>
+    {% endblock %}
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+    <div class="footer-container">
+        <!-- Top Footer with Horizontal Links -->
+        <div class="footer-top">
+            <div class="footer-brand">
+                <i class="fas fa-university"></i>
+                <div class="footer-brand-text">
+                    <h3>Loan Prediction System</h3>
+                    <p>Banker Administration Dashboard</p>
+                </div>
+            </div>
+
+            <!-- Horizontal Links -->
+            <div class="footer-links">
+                <a href="#">
+                    <i class="fas fa-shield-alt"></i>
+                    Privacy Policy
+                </a>
+                <a href="#">
+                    <i class="fas fa-file-contract"></i>
+                    Terms of Service
+                </a>
+                <a href="#">
+                    <i class="fas fa-envelope"></i>
+                    Contact
+                </a>
+                <a href="#">
+                    <i class="fas fa-question-circle"></i>
+                    FAQ
+                </a>
+            </div>
+
+            <!-- Social Icons -->
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <!-- Middle Footer - Project Info -->
+        <div class="footer-middle">
+            <div class="footer-info-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Major Project – Bachelor of Computer Engineering</span>
+            </div>
+            <div class="footer-info-item">
+                <i class="fas fa-code-branch"></i>
+                <span>Version 2.0.0</span>
+            </div>
+            <div class="footer-info-item">
+                <i class="fas fa-users"></i>
+                <span>Team Members</span>
+            </div>
+        </div>
+
+        <!-- Bottom Footer - Copyright -->
+        <div class="footer-bottom">
+            <div class="footer-copyright">
+                <i class="far fa-copyright"></i>
+                <span>{% now "Y" %} Loan Prediction System. All Rights Reserved.</span>
+            </div>
+            <div class="footer-contact">
+                <span>
+                    <i class="fas fa-map-marker-alt"></i>
+            Farwest University, SOE, Computer Engineering Department
+                </span>
+                <span>
+                    <i class="fas fa-envelope"></i>
+                    project@loanpredict.com
+                </span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

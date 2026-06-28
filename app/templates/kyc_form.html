@@ -1,0 +1,493 @@
+{% extends "User/base.html" %}
+
+{% block title %}KYC Application Form{% endblock %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block content %}
+<div class="kyc-container">
+    <!-- Page Header -->
+    <div class="kyc-header">
+        <div class="header-icon">
+            <i class="fas fa-id-card"></i>
+        </div>
+        <div class="header-title">
+            <h1>KYC Application Form</h1>
+            <p>Know Your Customer - Complete your verification</p>
+        </div>
+        <div class="header-progress">
+            <div class="progress-step active">Personal Info</div>
+            <div class="progress-step">Address</div>
+            <div class="progress-step">Financial</div>
+            <div class="progress-step">Documents</div>
+        </div>
+    </div>
+
+    <!-- Main Form -->
+    <form method="POST" enctype="multipart/form-data" id="kycForm" class="kyc-form">
+        {% csrf_token %}
+        
+        <!-- Personal Information Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-user-circle"></i>
+                <h3>Personal Information</h3>
+                <span class="section-badge">Step 1 of 4</span>
+            </div>
+            
+            <div class="form-grid">
+                <!-- Full Name (Read-only) -->
+                <div class="form-group full-width">
+                    <label>
+                        <i class="fas fa-user"></i>
+                        Full Name <span class="required">*</span>
+                    </label>
+                    <div class="readonly-field">
+                        <input type="text" 
+                               name="full_name" 
+                               value="{% if kyc %}{{ kyc.full_name }}{% else %}{{ user_data.full_name }}{% endif %}" 
+                               readonly 
+                               required>
+                        <span class="field-note"><i class="fas fa-lock"></i> from registration - cannot be edited</span>
+                    </div>
+                </div>
+
+                <!-- Email (Read-only) -->
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-envelope"></i>
+                        Email Address <span class="required">*</span>
+                    </label>
+                    <div class="readonly-field">
+                        <input type="email" 
+                               name="email" 
+                               value="{% if kyc %}{{ kyc.email }}{% else %}{{ user_data.email }}{% endif %}" 
+                               readonly 
+                               required>
+                    </div>
+                </div>
+
+                <!-- Mobile Number (Read-only) -->
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-phone"></i>
+                        Mobile Number <span class="required">*</span>
+                    </label>
+                    <div class="readonly-field">
+                        <input type="tel" 
+                               name="mobile_number" 
+                               value="{% if kyc %}{{ kyc.mobile_number }}{% else %}{{ user_data.phone_number }}{% endif %}" 
+                               readonly 
+                               required>
+                    </div>
+                </div>
+
+                <!-- Date of Birth -->
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-calendar-alt"></i>
+                        Date of Birth <span class="required">*</span>
+                    </label>
+                    <input type="date" 
+                           name="date_of_birth" 
+                           value="{{ kyc.date_of_birth|date:'Y-m-d' }}" 
+                           required
+                           class="date-input">
+                </div>
+
+                <!-- Gender -->
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-venus-mars"></i>
+                        Gender <span class="required">*</span>
+                    </label>
+                    <div class="select-wrapper">
+                        <select name="gender" required>
+                            <option value="" disabled {% if not kyc.gender %}selected{% endif %}>Select Gender</option>
+                            <option value="Male" {% if kyc.gender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if kyc.gender == 'Female' %}selected{% endif %}>Female</option>
+                            <option value="Other" {% if kyc.gender == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+
+                <!-- Father/Spouse Name -->
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-user-friends"></i>
+                        Father/Spouse Name <span class="required">*</span>
+                    </label>
+                    <input type="text" 
+                           name="father_spouse_name" 
+                           value="{{ kyc.father_spouse_name }}" 
+                           placeholder="Enter father or spouse name"
+                           required>
+                </div>
+
+                <!-- Marital Status -->
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-heart"></i>
+                        Marital Status <span class="required">*</span>
+                    </label>
+                    <div class="select-wrapper">
+                        <select name="marital_status" required>
+                            <option value="" disabled {% if not kyc.marital_status %}selected{% endif %}>Select Marital Status</option>
+                            <option value="Single" {% if kyc.marital_status == 'Single' %}selected{% endif %}>Single</option>
+                            <option value="Married" {% if kyc.marital_status == 'Married' %}selected{% endif %}>Married</option>
+                            <option value="Divorced" {% if kyc.marital_status == 'Divorced' %}selected{% endif %}>Divorced</option>
+                            <option value="Widowed" {% if kyc.marital_status == 'Widowed' %}selected{% endif %}>Widowed</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Details Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Address Details</h3>
+                <span class="section-badge">Step 2 of 4</span>
+            </div>
+
+            <div class="form-grid">
+                <!-- Current Address -->
+                <div class="form-group full-width">
+                    <label>
+                        <i class="fas fa-home"></i>
+                        Current Address <span class="required">*</span>
+                    </label>
+                    <textarea name="current_address" 
+                              rows="4" 
+                              placeholder="Enter your current residential address"
+                              required>{{ kyc.current_address }}</textarea>
+                    <span class="char-counter">0/500</span>
+                </div>
+
+                <!-- Permanent Address -->
+                <div class="form-group full-width">
+                    <label>
+                        <i class="fas fa-map-pin"></i>
+                        Permanent Address <span class="required">*</span>
+                    </label>
+                    <textarea name="permanent_address" 
+                              rows="4" 
+                              placeholder="Enter your permanent address"
+                              required>{{ kyc.permanent_address }}</textarea>
+                    <span class="char-counter">0/500</span>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="sameAsCurrent">
+                        <span class="checkbox-custom"></span>
+                        Same as current address
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Information Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-chart-pie"></i>
+                <h3>Financial Information</h3>
+                <span class="section-badge">Step 3 of 4</span>
+            </div>
+
+            <div class="form-grid">
+                <!-- Occupation Type -->
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-briefcase"></i>
+                        Occupation Type <span class="required">*</span>
+                    </label>
+                    <div class="select-wrapper">
+                        <select name="occupation_type" required>
+                            <option value="" disabled {% if not kyc.occupation_type %}selected{% endif %}>Select Occupation</option>
+                            <option value="Salaried" {% if kyc.occupation_type == 'Salaried' %}selected{% endif %}>Salaried</option>
+                            <option value="Self-Employed" {% if kyc.occupation_type == 'Self-Employed' %}selected{% endif %}>Self-Employed</option>
+                            <option value="Business" {% if kyc.occupation_type == 'Business' %}selected{% endif %}>Business</option>
+                            <option value="Student" {% if kyc.occupation_type == 'Student' %}selected{% endif %}>Student</option>
+                            <option value="Retired" {% if kyc.occupation_type == 'Retired' %}selected{% endif %}>Retired</option>
+                            <option value="Other" {% if kyc.occupation_type == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+
+                <!-- Annual Income -->
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-rupee-sign"></i>
+                        Annual Income <span class="required">*</span>
+                    </label>
+                    <div class="input-with-prefix">
+                        <span class="prefix">₹</span>
+                        <input type="number" 
+                               name="annual_income" 
+                               value="{{ kyc.annual_income }}" 
+                               min="0"
+                               step="1000"
+                               placeholder="Enter annual income"
+                               required>
+                    </div>
+                </div>
+
+                <!-- Source of Funds -->
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-hand-holding-usd"></i>
+                        Source of Funds <span class="required">*</span>
+                    </label>
+                    <input type="text" 
+                           name="source_of_funds" 
+                           value="{{ kyc.source_of_funds }}" 
+                           placeholder="e.g., Salary, Business, Savings"
+                           required>
+                </div>
+
+                <!-- Nature of Business -->
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-store"></i>
+                        Nature of Business
+                    </label>
+                    <input type="text" 
+                           name="nature_of_business" 
+                           value="{{ kyc.nature_of_business }}"
+                           placeholder="If applicable">
+                </div>
+
+                <!-- Purpose of Account -->
+                <div class="form-group full-width">
+                    <label>
+                        <i class="fas fa-question-circle"></i>
+                        Purpose of Account <span class="required">*</span>
+                    </label>
+                    <textarea name="purpose_of_account" 
+                              rows="3" 
+                              placeholder="Describe the purpose of opening this account"
+                              required>{{ kyc.purpose_of_account }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Document Upload Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-file-upload"></i>
+                <h3>Document Upload</h3>
+                <span class="section-badge">Step 4 of 4</span>
+            </div>
+
+            <div class="upload-grid">
+                <!-- ID Proof -->
+                <div class="upload-item">
+                    <div class="upload-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <div class="upload-content">
+                        <label>ID Proof <span class="required">*</span></label>
+                        <div class="file-input-wrapper">
+                            <input type="file" 
+                                   name="id_proof" 
+                                   id="id_proof"
+                                   accept=".pdf,.jpg,.jpeg,.png" 
+                                   {% if not kyc %}required{% endif %}
+                                   data-max-size="5">
+                            <label for="id_proof" class="file-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Choose file</span>
+                            </label>
+                            <span class="file-name"></span>
+                        </div>
+                        <div class="file-requirements">
+                            <i class="fas fa-info-circle"></i>
+                            Accepted: PDF, JPG, JPEG, PNG (Max 5MB)
+                        </div>
+                        {% if kyc and kyc.id_proof %}
+                        <div class="current-file">
+                            <i class="fas fa-file"></i>
+                            Current: <a href="{{ kyc.id_proof.url }}" target="_blank">View Document</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Photograph -->
+                <div class="upload-item">
+                    <div class="upload-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="upload-content">
+                        <label>Photograph <span class="required">*</span></label>
+                        <div class="file-input-wrapper">
+                            <input type="file" 
+                                   name="photograph" 
+                                   id="photograph"
+                                   accept=".jpg,.jpeg,.png" 
+                                   {% if not kyc %}required{% endif %}
+                                   data-max-size="2">
+                            <label for="photograph" class="file-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Choose file</span>
+                            </label>
+                            <span class="file-name"></span>
+                        </div>
+                        <div class="file-requirements">
+                            <i class="fas fa-info-circle"></i>
+                            Accepted: JPG, JPEG, PNG (Max 2MB)
+                        </div>
+                        {% if kyc and kyc.photograph %}
+                        <div class="current-file">
+                            <i class="fas fa-image"></i>
+                            Current: <a href="{{ kyc.photograph.url }}" target="_blank">View Photo</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Declaration Section -->
+        <div class="declaration-section">
+            <div class="section-header">
+                <i class="fas fa-check-circle"></i>
+                <h3>Declaration</h3>
+            </div>
+
+            <div class="declaration-content">
+                <label class="checkbox-label declaration-checkbox">
+                    <input type="checkbox" id="declaration" required>
+                    <span class="checkbox-custom"></span>
+                    <span class="declaration-text">
+                        I hereby declare that the information provided above is true and correct to the best of my knowledge. 
+                        I understand that furnishing false information may lead to rejection of my application and legal consequences.
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">
+                <i class="fas fa-times"></i>
+                Cancel
+            </a>
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+                <i class="fas fa-check"></i>
+                {% if kyc %}Update KYC{% else %}Submit KYC{% endif %}
+            </button>
+        </div>
+
+        <!-- Mandatory Fields Note -->
+        <div class="mandatory-note">
+            <i class="fas fa-asterisk"></i>
+            <span>Fields marked with * are mandatory</span>
+        </div>
+    </form>
+</div>
+
+<!-- JavaScript for enhanced functionality -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Same as current address checkbox
+    const sameAsCurrent = document.getElementById('sameAsCurrent');
+    const currentAddress = document.querySelector('textarea[name="current_address"]');
+    const permanentAddress = document.querySelector('textarea[name="permanent_address"]');
+    
+    if (sameAsCurrent) {
+        sameAsCurrent.addEventListener('change', function() {
+            if (this.checked) {
+                permanentAddress.value = currentAddress.value;
+                permanentAddress.readOnly = true;
+                permanentAddress.style.backgroundColor = '#f8fafc';
+            } else {
+                permanentAddress.readOnly = false;
+                permanentAddress.style.backgroundColor = '';
+            }
+        });
+    }
+
+    // File input preview
+    const fileInputs = document.querySelectorAll('input[type="file"]');
+    fileInputs.forEach(input => {
+        input.addEventListener('change', function(e) {
+            const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+            const fileNameSpan = this.closest('.file-input-wrapper').querySelector('.file-name');
+            if (fileNameSpan) {
+                fileNameSpan.textContent = fileName;
+            }
+        });
+    });
+
+    // Character counter for textareas
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(textarea => {
+        const counter = textarea.nextElementSibling;
+        if (counter && counter.classList.contains('char-counter')) {
+            textarea.addEventListener('input', function() {
+                counter.textContent = `${this.value.length}/500`;
+            });
+        }
+    });
+
+    // Form submission validation
+    document.getElementById('kycForm').addEventListener('submit', function(e) {
+        const declaration = document.getElementById('declaration');
+        if (!declaration.checked) {
+            e.preventDefault();
+            showError('Please accept the declaration before submitting.');
+            return false;
+        }
+
+        // File size validation
+        const photoInput = document.querySelector('input[name="photograph"]');
+        if (photoInput.files.length > 0) {
+            const fileSize = photoInput.files[0].size / 1024 / 1024; // in MB
+            const maxSize = photoInput.dataset.maxSize || 2;
+            if (fileSize > maxSize) {
+                e.preventDefault();
+                showError(`Photograph file size should not exceed ${maxSize}MB.`);
+                return false;
+            }
+        }
+
+        const idProofInput = document.querySelector('input[name="id_proof"]');
+        if (idProofInput.files.length > 0) {
+            const fileSize = idProofInput.files[0].size / 1024 / 1024;
+            const maxSize = idProofInput.dataset.maxSize || 5;
+            if (fileSize > maxSize) {
+                e.preventDefault();
+                showError(`ID proof file size should not exceed ${maxSize}MB.`);
+                return false;
+            }
+        }
+
+        // Show loading state
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        submitBtn.disabled = true;
+    });
+
+    function showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.innerHTML = `
+            <i class="fas fa-exclamation-circle"></i>
+            <span>${message}</span>
+        `;
+        
+        const container = document.querySelector('.kyc-container');
+        container.insertBefore(errorDiv, container.firstChild);
+        
+        setTimeout(() => {
+            errorDiv.remove();
+        }, 5000);
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends "Banker/base.html" %}
+{% block title %}Loan Details{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Loan Application Details</h2>
+
+    <div class="loan-details-card">
+        <!-- User Info Section -->
+        <div class="user-info-section">
+            <p>
+                <i class="fas fa-user-circle"></i>
+                <strong>User:</strong> {{ loan.user.full_name }} ({{ loan.user.email }})
+            </p>
+            <p>
+                <i class="fas fa-clock"></i>
+                <strong>Submitted At:</strong> {{ loan.created_at|date:"Y-m-d H:i:s" }}
+            </p>
+            <span class="loan-status-badge {{ loan.status|lower }}">
+                {{ loan.status }}
+            </span>
+        </div>
+
+        <hr class="custom-hr">
+
+        <!-- Personal Info Section -->
+        <h3 class="section-header">
+            <i class="fas fa-user-details"></i>
+            Personal Information
+        </h3>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-calendar"></i> Age</span>
+                <span class="info-value numeric">{{ loan.age }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-coins"></i> Income</span>
+                <span class="info-value numeric">Rs {{ loan.income }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-hand-holding-usd"></i> Loan Amount</span>
+                <span class="info-value numeric">Rs {{ loan.loan_amount }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-star"></i> Credit Score</span>
+                <span class="info-value credit-score">{{ loan.credit_score }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-briefcase"></i> Months Employed</span>
+                <span class="info-value">{{ loan.months_employed }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-chart-line"></i> Credit Lines</span>
+                <span class="info-value">{{ loan.num_credit_lines }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-percent"></i> Interest Rate</span>
+                <span class="info-value">{{ loan.interest_rate }}%</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-clock"></i> Loan Term</span>
+                <span class="info-value">{{ loan.loan_term }} months</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-chart-pie"></i> DTI Ratio</span>
+                <span class="info-value">{{ loan.dti_ratio }}</span>
+            </div>
+        </div>
+
+        <h3 class="section-header">
+            <i class="fas fa-graduation-cap"></i>
+            Education & Employment
+        </h3>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-school"></i> Education</span>
+                <span class="info-value">{{ loan.education }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-briefcase"></i> Employment Type</span>
+                <span class="info-value">{{ loan.employment_type }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-heart"></i> Marital Status</span>
+                <span class="info-value">{{ loan.marital_status }}</span>
+            </div>
+        </div>
+
+        <h3 class="section-header">
+            <i class="fas fa-info-circle"></i>
+            Additional Information
+        </h3>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-home"></i> Has Mortgage</span>
+                <span class="info-value">{{ loan.has_mortgage }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-child"></i> Has Dependents</span>
+                <span class="info-value">{{ loan.has_dependents }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-handshake"></i> Has Co-Signer</span>
+                <span class="info-value">{{ loan.has_cosigner }}</span>
+            </div>
+        </div>
+
+        <div class="prediction-section">
+            <div>
+                <span class="info-label"><i class="fas fa-chart-bar"></i> Prediction Result</span>
+                <div class="prediction-result">{{ loan.prediction_result|default:"N/A" }}</div>
+            </div>
+            <div>
+                <span class="info-label"><i class="fas fa-percentage"></i> Probability</span>
+                <div class="prediction-probability">{{ loan.prediction_probability|floatformat:2|default:"N/A" }}</div>
+            </div>
+        </div>
+
+        <hr class="custom-hr">
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            {% if loan.status == "Pending" %}
+            <a href="{% url 'approve_loan' loan.id %}" class="detail-action-btn approve">
+                <i class="fas fa-check-circle"></i>
+                Approve
+            </a>
+            <a href="{% url 'reject_loan' loan.id %}" class="detail-action-btn reject">
+                <i class="fas fa-times-circle"></i>
+                Reject
+            </a>
+            {% elif loan.status == "Approved" %}
+            <a href="{% url 'clear_loan' loan.id %}" class="detail-action-btn clear">
+                <i class="fas fa-check-double"></i>
+                Clear Loan
+            </a>
+            {% endif %}
+
+            <a href="{% url 'loan_applications' %}" class="detail-action-btn back">
+                <i class="fas fa-arrow-left"></i>
+                Back to Applications
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

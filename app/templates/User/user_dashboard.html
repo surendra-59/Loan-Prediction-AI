@@ -1,0 +1,86 @@
+{% extends "User/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h2>Welcome {{ request.user.full_name }}</h2>
+
+    <!-- Display messages -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+    <!-- KYC SECTION -->
+
+{% if not kyc %}
+
+<div class="kyc-action-container">
+    <div class="kyc-info-banner">
+        <i class="fas fa-id-card"></i>
+        <span>
+            <strong>Complete your KYC</strong> - Fill out the KYC form to verify your identity and access all features.
+        </span>
+    </div>
+
+    <div class="kyc-button-wrapper">
+        <a href="{% url 'kyc_form' %}" class="kyc-button">
+            <i class="fas fa-edit"></i>
+            <span>Fill KYC Form</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</div>
+
+{% else %}
+
+<div class="kyc-status-card">
+
+    <div class="kyc-status-icon
+        {% if kyc.status == 'Pending' %}pending
+        {% elif kyc.status == 'Approved' %}completed
+        {% elif kyc.status == 'Rejected' %}rejected
+        {% endif %}">
+
+        {% if kyc.status == 'Pending' %}
+            <i class="fas fa-clock"></i>
+        {% elif kyc.status == 'Approved' %}
+            <i class="fas fa-check-circle"></i>
+        {% elif kyc.status == 'Rejected' %}
+            <i class="fas fa-times-circle"></i>
+        {% endif %}
+    </div>
+
+    <div class="kyc-status-text">
+        <h4>KYC Status: {{ kyc.status }}</h4>
+
+        <p>
+        {% if kyc.status == "Pending" %}
+            Your KYC is being reviewed.
+        {% elif kyc.status == "Rejected" %}
+            Your KYC was rejected. Please update and resubmit.
+        {% elif kyc.status == "Approved" %}
+            Your KYC has been approved!
+        {% endif %}
+        </p>
+
+        {% if kyc.status == "Pending" or kyc.status == "Rejected" %}
+        <a href="{% url 'kyc_form' %}" class="kyc-button">
+            <i class="fas fa-edit"></i>
+            Update KYC
+        </a>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends "Banker/base.html" %}
+
+{% block title %}KYC Details{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h2>KYC Details</h2>
+
+    <div class="kyc-details-card">
+        <!-- Status Badge -->
+        <div class="kyc-status-badge 
+            {% if kyc.status == 'Approved' %}approved
+            {% elif kyc.status == 'Rejected' %}rejected
+            {% else %}pending{% endif %}">
+            {{ kyc.status }}
+        </div>
+
+        <!-- Details Grid -->
+        <div class="details-grid">
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-user"></i> Full Name
+                </div>
+                <div class="detail-value">{{ kyc.full_name }}</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-calendar"></i> Date of Birth
+                </div>
+                <div class="detail-value">{{ kyc.date_of_birth }}</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-venus-mars"></i> Gender
+                </div>
+                <div class="detail-value">{{ kyc.gender }}</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-phone"></i> Mobile
+                </div>
+                <div class="detail-value">{{ kyc.mobile_number }}</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-envelope"></i> Email
+                </div>
+                <div class="detail-value">{{ kyc.email }}</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-map-marker-alt"></i> Current Address
+                </div>
+                <div class="detail-value">{{ kyc.current_address }}</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-map-pin"></i> Permanent Address
+                </div>
+                <div class="detail-value">{{ kyc.permanent_address }}</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-briefcase"></i> Occupation
+                </div>
+                <div class="detail-value">{{ kyc.occupation_type }}</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-money-bill-wave"></i> Annual Income
+                </div>
+                <div class="detail-value">{{ kyc.annual_income }}</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-hand-holding-usd"></i> Source of Funds
+                </div>
+                <div class="detail-value">{{ kyc.source_of_funds }}</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-building"></i> Business Nature
+                </div>
+                <div class="detail-value">{{ kyc.nature_of_business }}</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-flag-checkered"></i> Purpose
+                </div>
+                <div class="detail-value">{{ kyc.purpose_of_account }}</div>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- Documents Section -->
+        <div class="documents-section">
+            <h3>
+                <i class="fas fa-file-alt"></i>
+                Uploaded Documents
+            </h3>
+
+            <div class="image-gallery">
+                {% if kyc.id_proof %}
+                <div class="image-card">
+                    <p>
+                        <i class="fas fa-id-card"></i>
+                        ID Proof
+                    </p>
+                    <img src="{{ kyc.id_proof.url }}" alt="ID Proof">
+                </div>
+                {% endif %}
+
+                {% if kyc.photograph %}
+                <div class="image-card">
+                    <p>
+                        <i class="fas fa-camera"></i>
+                        Photograph
+                    </p>
+                    <img src="{{ kyc.photograph.url }}" alt="Photograph">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <a href="{% url 'banker_dashboard' %}" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+    </div>
+</div>
+
+{% endblock %}

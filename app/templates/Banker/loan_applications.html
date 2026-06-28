@@ -1,0 +1,181 @@
+{% extends "Banker/base.html" %}
+
+{% block content %}
+
+<div class="dashboard-scroll">
+
+<h2>Loan Applications Dashboard</h2>
+
+<!-- Statistics -->
+<div class="stats-container">
+
+    <div class="stat-card">
+        <b>Total Applications:</b> {{ total }}
+    </div>
+
+    <div class="stat-card">
+        <b>New / Pending:</b> {{ pending }}
+    </div>
+
+</div>
+
+
+<!-- Search -->
+<form method="GET" class="search-form">
+
+    <input 
+        type="text"
+        name="search"
+        placeholder="Search by User ID or Name"
+        value="{{ search_term }}"
+        class="search-input"
+    >
+
+    <button type="submit" class="search-btn">
+        Search
+    </button>
+
+    {% if search_term %}
+        <a href="{% url 'loan_applications' %}" class="clear-link">
+            Clear
+        </a>
+    {% endif %}
+
+</form>
+
+
+
+<!-- Loan Applications Table -->
+
+{% if applications %}
+
+<div class="table-wrapper">
+
+<table class="loan-table" border="1">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Loan Amount</th>
+            <th>Prediction</th>
+            <th>Submitted At</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for loan in applications %}
+
+        <tr>
+
+            <td>{{ loan.id }}</td>
+
+            <td>
+                {{ loan.user.full_name }} <br>
+                <small>{{ loan.user.email }}</small>
+            </td>
+
+            <td>
+                Rs {{ loan.loan_amount }}
+            </td>
+
+            <td>
+
+                {% if loan.prediction_result %}
+                    {{ loan.prediction_result }}
+
+                    <small>
+                        ({{ loan.prediction_probability|floatformat:2 }})
+                    </small>
+
+                {% else %}
+                    N/A
+                {% endif %}
+
+            </td>
+
+            <td>
+                {{ loan.created_at|date:"Y-m-d H:i:s" }}
+            </td>
+
+            <td>
+
+                {% if loan.status == "PENDING" %}
+                    <span class="status pending">Pending</span>
+
+                {% elif loan.status == "APPROVED" %}
+                    <span class="status approved">Approved</span>
+
+                {% elif loan.status == "REJECTED" %}
+                    <span class="status rejected">Rejected</span>
+
+                {% elif loan.status == "CLEARED" %}
+                    <span class="status cleared">Cleared</span>
+
+                {% else %}
+                    {{ loan.status }}
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                <!-- View Details -->
+
+                <a href="{% url 'view_loan_details' loan.id %}" class="btn view">
+                    View Details
+                </a>
+
+
+                {% if loan.status == "PENDING" %}
+
+                    <a href="{% url 'approve_loan' loan.id %}" class="btn approve">
+                        Approve
+                    </a>
+
+                    <a href="{% url 'reject_loan' loan.id %}" class="btn reject">
+                        Reject
+                    </a>
+
+                {% elif loan.status == "APPROVED" %}
+
+                    <a href="{% url 'clear_loan' loan.id %}" class="btn clear">
+                        Clear Loan
+                    </a>
+
+                {% elif loan.status == "CLEARED" or loan.status == "REJECTED" %}
+
+                    <!-- NEW DELETE BUTTON -->
+
+                    <a href="{% url 'delete_loan' loan.id %}" 
+                       class="btn delete"
+                       onclick="return confirm('Are you sure you want to delete this cleared loan?');">
+                        Delete
+                    </a>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+</div>
+
+{% else %}
+
+<p>No loan applications found.</p>
+
+{% endif %}
+
+</div>
+
+{% endblock %}
