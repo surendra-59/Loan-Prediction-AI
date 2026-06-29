@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-bk5ek)jur8t^cc15qh$d=qm*-=0*b3bfl-bd!zwg(qlnu2$59f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["100.54.139.66","localhost","127.0.0.1"]
 
 
 # Application definition
@@ -79,26 +79,26 @@ WSGI_APPLICATION = 'Loan_prediction_AI.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'loan_prediction_db',
-        'USER': 'root',
-        'PASSWORD': 'Babi4520$',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'loan_prediction_db',
+#         'USER': 'root',
+#         'PASSWORD': 'Babi4520$',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
 
 
 

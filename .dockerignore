@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+db.sqlite3
+media/
+static/
+.git/
+.gitignore
+.python-version
+uv.lock
