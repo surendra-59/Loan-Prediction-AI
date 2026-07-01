@@ -7,6 +7,7 @@ from .models import CustomUser, KYC, LoanApplication
 from .decorators import role_required
 from .ml_utils import prepare_user_input
 import joblib
+from concurrent.futures import ThreadPoolExecutor
 
 # Explainable AI imports
 import sys, os
@@ -402,13 +403,42 @@ def apply_loan(request):
                 try:
                     # Run SHAP + counterfactual analysis
                     xai_result = analyze_loan_application(model, shap_explainer, model_input)
-                    
-                    # Generate NLP report
-                    nlp_report = generate_full_nlp_report(
-                        explanation_result=xai_result['explanation'],
-                        counterfactual_result=xai_result['counterfactual'],
-                        user_data_df=model_input,
-                    )
+
+                    # Run NLP report and DB save in parallel
+                    def _generate_nlp():
+                        return generate_full_nlp_report(
+                            explanation_result=xai_result['explanation'],
+                            counterfactual_result=xai_result['counterfactual'],
+                            user_data_df=model_input,
+                        )
+
+                    def _save_loan():
+                        return LoanApplication.objects.create(
+                            user=request.user,
+                            age=user_data["Age"],
+                            income=user_data["Income"],
+                            loan_amount=user_data["LoanAmount"],
+                            credit_score=user_data["CreditScore"],
+                            months_employed=user_data["MonthsEmployed"],
+                            num_credit_lines=user_data["NumCreditLines"],
+                            interest_rate=user_data["InterestRate"],
+                            loan_term=user_data["LoanTerm"],
+                            dti_ratio=user_data["DTIRatio"],
+                            education=user_data["Education"],
+                            employment_type=user_data["EmploymentType"],
+                            marital_status=user_data["MaritalStatus"],
+                            has_mortgage=user_data["HasMortgage"],
+                            has_dependents=user_data["HasDependents"],
+                            has_cosigner=user_data["HasCoSigner"],
+                            prediction_result=prediction,
+                            prediction_probability=probability,
+                        )
+
+                    with ThreadPoolExecutor(max_workers=2) as executor:
+                        nlp_future = executor.submit(_generate_nlp)
+                        db_future = executor.submit(_save_loan)
+                        nlp_report = nlp_future.result()
+                        loan = db_future.result()
                     
                     # Build feature impacts for template
                     feature_impacts = []
@@ -517,33 +547,40 @@ def apply_loan(request):
                         'xai_available': True,
                     }
                     
+                    # DB save already done above in parallel
+                    db_saved = True
+                    
                 except Exception as e:
                     print(f"XAI Error: {e}")
                     import traceback
                     traceback.print_exc()
                     xai_context = {'xai_available': False, 'xai_error': str(e)}
+                    db_saved = False
+            else:
+                db_saved = False
             
-            # Save to database
-            loan = LoanApplication.objects.create(
-                user=request.user,
-                age=user_data["Age"],
-                income=user_data["Income"],
-                loan_amount=user_data["LoanAmount"],
-                credit_score=user_data["CreditScore"],
-                months_employed=user_data["MonthsEmployed"],
-                num_credit_lines=user_data["NumCreditLines"],
-                interest_rate=user_data["InterestRate"],
-                loan_term=user_data["LoanTerm"],
-                dti_ratio=user_data["DTIRatio"],
-                education=user_data["Education"],
-                employment_type=user_data["EmploymentType"],
-                marital_status=user_data["MaritalStatus"],
-                has_mortgage=user_data["HasMortgage"],
-                has_dependents=user_data["HasDependents"],
-                has_cosigner=user_data["HasCoSigner"],
-                prediction_result=prediction,
-                prediction_probability=probability,
-            )
+            # Save to database (only if not already saved in parallel above)
+            if not db_saved:
+                loan = LoanApplication.objects.create(
+                    user=request.user,
+                    age=user_data["Age"],
+                    income=user_data["Income"],
+                    loan_amount=user_data["LoanAmount"],
+                    credit_score=user_data["CreditScore"],
+                    months_employed=user_data["MonthsEmployed"],
+                    num_credit_lines=user_data["NumCreditLines"],
+                    interest_rate=user_data["InterestRate"],
+                    loan_term=user_data["LoanTerm"],
+                    dti_ratio=user_data["DTIRatio"],
+                    education=user_data["Education"],
+                    employment_type=user_data["EmploymentType"],
+                    marital_status=user_data["MaritalStatus"],
+                    has_mortgage=user_data["HasMortgage"],
+                    has_dependents=user_data["HasDependents"],
+                    has_cosigner=user_data["HasCoSigner"],
+                    prediction_result=prediction,
+                    prediction_probability=probability,
+                )
             
             messages.success(request, "Loan Application Submitted Successfully")
             

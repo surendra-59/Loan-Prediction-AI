@@ -127,7 +127,8 @@ def find_counterfactual(
     actionable_features=None,
     threshold=0.5,
     target_prob=0.40,      # aim below threshold with margin
-    max_iter=500,
+    max_iter=200,
+    balance_weight=200.0,  # penalty weight for unbalanced solutions
     seed=42,
 ):
     """
@@ -174,11 +175,20 @@ def find_counterfactual(
         orig_val = original[idx]
         lo, hi = FEATURE_BOUNDS.get(feat, (orig_val * 0.5, orig_val * 2.0))
 
+        # Extend bounds to always include the user's current value
+        # (prevents inverted bounds when orig_val is outside FEATURE_BOUNDS)
+        lo = min(lo, orig_val)
+        hi = max(hi, orig_val * 1.5)  # allow headroom above current value
+
         direction = CHANGE_DIRECTION.get(feat, 'both')
         if direction == 'increase':
             lo = orig_val        # can only go up from current
         elif direction == 'decrease':
             hi = orig_val        # can only go down from current
+
+        # Safety: ensure lo < hi (add small epsilon if equal)
+        if lo >= hi:
+            hi = lo + max(abs(lo) * 0.01, 1.0)
 
         opt_bounds.append((lo, hi))
 
@@ -193,7 +203,9 @@ def find_counterfactual(
 
     def objective(x):
         """
-        Minimize: normalized L2 distance of changes + penalty if prediction hasn't flipped.
+        Minimize: normalized L2 distance + balance penalty + flip penalty.
+        The balance penalty discourages solutions where a single feature
+        carries most of the change, producing 2-3 meaningful recommendations.
         """
         # Reconstruct the full feature vector
         modified = original.copy()
@@ -203,16 +215,25 @@ def find_counterfactual(
         prob = model.predict_proba(df)[0][1]
 
         # Normalized distance: how much did we change?
-        distance = np.sum(((x - orig_actionable) / scales) ** 2)
+        prop_changes = np.abs((x - orig_actionable) / scales)
+        distance = np.sum(prop_changes ** 2)
 
-        # Penalty: heavily penalize solutions that don't flip the prediction
+        # Balance penalty: penalize concentration of change in one feature
+        total_change = prop_changes.sum()
+        if total_change > 1e-10:
+            concentration = np.max(prop_changes) / total_change
+            balance_penalty = balance_weight * concentration ** 2
+        else:
+            balance_penalty = 0.0
+
+        # Flip penalty: heavily penalize solutions that don't flip the prediction
         if prob >= threshold:
-            penalty = 1000.0 * (prob - target_prob + 1.0) ** 2
+            flip_penalty = 1000.0 * (prob - target_prob + 1.0) ** 2
         else:
             # Slight preference for solutions closer to the target_prob
-            penalty = 50.0 * (prob - target_prob) ** 2
+            flip_penalty = 50.0 * (prob - target_prob) ** 2
 
-        return distance + penalty
+        return distance + balance_penalty + flip_penalty
 
     # Run optimizer
     result = differential_evolution(
@@ -220,8 +241,8 @@ def find_counterfactual(
         bounds=opt_bounds,
         maxiter=max_iter,
         seed=seed,
-        tol=1e-8,
-        atol=1e-8,
+        tol=1e-6,
+        atol=1e-6,
         polish=False,    # Don't polish (gradient-based polish won't help tree models)
         init='sobol',    # Better initial sampling coverage
         mutation=(0.5, 1.5),
@@ -234,12 +255,14 @@ def find_counterfactual(
     cf_df = pd.DataFrame([cf_values], columns=columns)
     cf_prob = model.predict_proba(cf_df)[0][1]
 
-    # Build changes summary
+    # Build changes summary — filter out trivial (<1% and <$10 absolute) changes
     changes_data = []
     for feat, old_val, new_val in zip(actionable_features, orig_actionable, result.x):
         change = new_val - old_val
         pct = (change / old_val * 100) if old_val != 0 else float('inf')
-        if abs(change) > 1e-6:  # only report meaningful changes
+        # Only report meaningful changes: >1% change AND >10 absolute for dollar features
+        abs_threshold = 10.0 if feat in ('Income', 'LoanAmount') else 0.5
+        if abs(change) > abs_threshold and abs(pct) > 1.0:
             changes_data.append({
                 'Feature':   feat,
                 'Original':  round(old_val, 2),
