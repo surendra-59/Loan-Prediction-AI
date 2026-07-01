@@ -9,7 +9,6 @@ venv/
 .env
 db.sqlite3
 media/
-static/
 .git/
 .gitignore
 .python-version
