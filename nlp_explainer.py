@@ -379,7 +379,7 @@ def generate_local_nlp_explanation(explanation_result, counterfactual_result=Non
                 target = row['Suggested']
                 
             if feat in ('Annual Income ($)', 'Requested Loan Amount ($)'):
-                lines.append(f"- {verb} your {feat} by roughly ${target:,.0f}.")
+                lines.append(f"- {verb} your {feat} by roughly {target:,.0f}.")
             elif feat == 'Debt-to-Income Ratio':
                 lines.append(f"- Aim for a {feat} of {row['Suggested']:.0%}.")
             else:
@@ -465,8 +465,8 @@ TOP FACTORS INFLUENCING THE DECISION:
         prompt += f"""
 APPLICANT PROFILE:
   - Age: {data.get('Age', 'N/A')}
-  - Annual Income: ${data.get('Income', 0):,.0f}
-  - Loan Amount Requested: ${data.get('LoanAmount', 0):,.0f}
+  - Annual Income: $ {data.get('Income', 0):,.0f}
+  - Loan Amount Requested: $ {data.get('LoanAmount', 0):,.0f}
   - Credit Score: {data.get('CreditScore', 'N/A')}
   - Months Employed: {data.get('MonthsEmployed', 'N/A')}
   - Debt-to-Income Ratio: {data.get('DTIRatio', 'N/A'):.0%}

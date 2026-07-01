@@ -451,7 +451,7 @@ def apply_loan(request):
                         
                         # Format value for display
                         if feat_name in ('Income', 'LoanAmount'):
-                            val_str = f"${value:,.0f}"
+                            val_str = f"Rs {value:,.0f}"
                         elif feat_name == 'DTIRatio':
                             val_str = f"{value:.0%}"
                         elif feat_name == 'InterestRate':
@@ -493,9 +493,9 @@ def apply_loan(request):
                             pct = row['Change_%']
                             
                             if feat in ('Income', 'LoanAmount'):
-                                orig_str = f"${orig:,.0f}"
-                                sugg_str = f"${sugg:,.0f}"
-                                chg_str = f"${chg:+,.0f}"
+                                orig_str = f"Rs {orig:,.0f}"
+                                sugg_str = f"Rs {sugg:,.0f}"
+                                chg_str = f"Rs {chg:+,.0f}"
                             elif feat == 'DTIRatio':
                                 orig_str = f"{orig:.0%}"
                                 sugg_str = f"{sugg:.0%}"

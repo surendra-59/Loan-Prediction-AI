@@ -36,14 +36,14 @@
     <!-- Main Form -->
     <form method="POST" class="loan-form" id="loanForm">
         {% csrf_token %}
-        
+
         <!-- Personal Information Section -->
         <div class="form-section">
             <div class="section-header">
                 <i class="fas fa-user-circle"></i>
                 <h3>Personal Information</h3>
             </div>
-            
+
             <div class="form-grid">
                 <!-- Age Field -->
                 <div class="form-group">
@@ -52,13 +52,8 @@
                         Age
                     </label>
                     <div class="input-wrapper">
-                        <input type="number" 
-                               id="age"
-                               name="Age" 
-                               min="18" 
-                               max="69" 
-                               required
-                               placeholder="Enter your age">
+                        <input type="number" id="age" name="Age" min="18" max="69" required
+                            placeholder="Enter your age">
                         <span class="input-hint">18 - 69 years</span>
                     </div>
                 </div>
@@ -66,17 +61,13 @@
                 <!-- Income Field -->
                 <div class="form-group">
                     <label for="income">
-                        <i class="fas fa-rupee-sign"></i>
+                        <i class="fas fa-dollar-sign"></i>
                         Annual Income
                     </label>
                     <div class="input-wrapper">
-                        <input type="number" 
-                               id="income"
-                               name="Income" 
-                               min="200000" 
-                               required
-                               placeholder="Minimum ₹2,00,000">
-                        <span class="input-hint">Minimum ₹2,00,000</span>
+                        <input type="number" id="income" name="Income" min="15000" max="150000" required
+                            placeholder="$ 15,000 - 150,000">
+                        <span class="input-hint">Range: $ 15,000 - 150,000</span>
                     </div>
                 </div>
 
@@ -87,13 +78,9 @@
                         Loan Amount
                     </label>
                     <div class="input-wrapper">
-                        <input type="number" 
-                               id="loanAmount"
-                               name="LoanAmount" 
-                               min="50000" 
-                               required
-                               placeholder="Minimum ₹50,000">
-                        <span class="input-hint">Minimum ₹50,000</span>
+                        <input type="number" id="loanAmount" name="LoanAmount" min="1000" max="250000" required
+                            placeholder="$ 1,000 - 250,000">
+                        <span class="input-hint">Range: $ 1,000 - 250,000</span>
                     </div>
                 </div>
 
@@ -104,14 +91,9 @@
                         Credit Score
                     </label>
                     <div class="input-wrapper">
-                        <input type="number" 
-                               id="creditScore"
-                               name="CreditScore" 
-                               min="0" 
-                               max="1000" 
-                               required
-                               placeholder="0 - 1000">
-                        <span class="input-hint">Range: 0 - 1000</span>
+                        <input type="number" id="creditScore" name="CreditScore" min="300" max="850" required
+                            placeholder="300 - 850">
+                        <span class="input-hint">Range: 300 - 850</span>
                     </div>
                 </div>
 
@@ -122,12 +104,7 @@
                         Months Employed
                     </label>
                     <div class="input-wrapper">
-                        <input type="number" 
-                               id="monthsEmployed"
-                               name="MonthsEmployed" 
-                               min="0" 
-                               required
-                               placeholder="Total months employed">
+                        <input type="number" id="monthsEmployed" name="MonthsEmployed" min="0" required placeholder="0">
                     </div>
                 </div>
 
@@ -138,12 +115,8 @@
                         Number of Credit Lines
                     </label>
                     <div class="input-wrapper">
-                        <input type="number" 
-                               id="numCreditLines"
-                               name="NumCreditLines" 
-                               min="0" 
-                               required
-                               placeholder="Total credit lines">
+                        <input type="number" id="numCreditLines" name="NumCreditLines" min="0" max="4" required
+                            placeholder="0 - 4">
                     </div>
                 </div>
 
@@ -154,15 +127,9 @@
                         Interest Rate
                     </label>
                     <div class="input-wrapper">
-                        <input type="number" 
-                               id="interestRate"
-                               step="0.1" 
-                               name="InterestRate" 
-                               min="0" 
-                               max="18" 
-                               required
-                               placeholder="0% - 18%">
-                        <span class="input-hint">Maximum 18%</span>
+                        <input type="number" id="interestRate" step="0.1" name="InterestRate" min="2" max="25" required
+                            placeholder="2% - 25%">
+                        <span class="input-hint">Range: 2.0% - 25.0%</span>
                     </div>
                 </div>
 
@@ -173,13 +140,9 @@
                         Loan Term (Months)
                     </label>
                     <div class="input-wrapper">
-                        <input type="number" 
-                               id="loanTerm"
-                               name="LoanTerm" 
-                               min="12" 
-                               required
-                               placeholder="Minimum 12 months">
-                        <span class="input-hint">Minimum 12 months</span>
+                        <input type="number" id="loanTerm" name="LoanTerm" min="12" max="60" required
+                            placeholder="12 - 60 months">
+                        <span class="input-hint">Range: 12 - 60 months</span>
                     </div>
                 </div>
 
@@ -190,15 +153,9 @@
                         Debt-to-Income Ratio
                     </label>
                     <div class="input-wrapper">
-                        <input type="number" 
-                               id="dtiRatio"
-                               step="0.01" 
-                               name="DTIRatio" 
-                               min="0" 
-                               max="1" 
-                               required
-                               placeholder="0.00 - 1.00">
-                        <span class="input-hint">Range: 0 - 1</span>
+                        <input type="number" id="dtiRatio" step="0.01" name="DTIRatio" min="0.0" max="1.0" required
+                            placeholder="0.0 - 1.0">
+                        <span class="input-hint">Range: 0.0 - 1.0</span>
                     </div>
                 </div>
             </div>
@@ -364,7 +321,8 @@
             </div>
             <div class="prediction-content">
                 <div class="prediction-badge {% if prediction == 'Low Risk' %}approved{% else %}rejected{% endif %}">
-                    <i class="fas {% if prediction == 'Low Risk' %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i>
+                    <i
+                        class="fas {% if prediction == 'Low Risk' %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i>
                     {{ prediction }}
                 </div>
                 <div class="risk-meter">
@@ -373,8 +331,10 @@
                         <span>{{ probability_pct }}%</span>
                     </div>
                     <div class="progress-bar">
-                        <div class="progress-fill" style="width: {{ probability_pct }}%;
-                             background: {% if probability_pct < 30 %}#10b981{% elif probability_pct < 60 %}#f59e0b{% else %}#ef4444{% endif %};"></div>
+                        <div class="progress-fill"
+                            style="width: {{ probability_pct }}%;
+                             background: {% if probability_pct < 30 %}#10b981{% elif probability_pct < 60 %}#f59e0b{% else %}#ef4444{% endif %};">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -393,19 +353,20 @@
                 <div class="health-main">
                     <div class="health-circle">
                         <svg viewBox="0 0 120 120">
-                            <circle cx="60" cy="60" r="52" fill="none" stroke="#2d2d3d" stroke-width="10"/>
+                            <circle cx="60" cy="60" r="52" fill="none" stroke="#2d2d3d" stroke-width="10" />
                             <circle cx="60" cy="60" r="52" fill="none"
                                 stroke="{% if health_score.score >= 65 %}#10b981{% elif health_score.score >= 45 %}#f59e0b{% else %}#ef4444{% endif %}"
                                 stroke-width="10" stroke-linecap="round"
                                 stroke-dasharray="{{ health_score.score|floatformat:0 }}% 999"
-                                transform="rotate(-90 60 60)"/>
+                                transform="rotate(-90 60 60)" />
                         </svg>
                         <div class="health-score-text">
                             <span class="score-num">{{ health_score.score|floatformat:0 }}</span>
                             <span class="score-label">/ 100</span>
                         </div>
                     </div>
-                    <div class="health-grade {% if health_score.score >= 65 %}grade-good{% elif health_score.score >= 45 %}grade-fair{% else %}grade-poor{% endif %}">
+                    <div
+                        class="health-grade {% if health_score.score >= 65 %}grade-good{% elif health_score.score >= 45 %}grade-fair{% else %}grade-poor{% endif %}">
                         {{ health_score.grade }}
                     </div>
                 </div>
@@ -414,8 +375,10 @@
                     <div class="breakdown-row">
                         <span class="breakdown-label">{{ item.component }}</span>
                         <div class="breakdown-bar-wrap">
-                            <div class="breakdown-bar" style="width: {{ item.bar_width }}%;
-                                background: {% if item.score >= 65 %}#10b981{% elif item.score >= 45 %}#f59e0b{% else %}#ef4444{% endif %};"></div>
+                            <div class="breakdown-bar"
+                                style="width: {{ item.bar_width }}%;
+                                background: {% if item.score >= 65 %}#10b981{% elif item.score >= 45 %}#f59e0b{% else %}#ef4444{% endif %};">
+                            </div>
                         </div>
                         <span class="breakdown-score">{{ item.score }}</span>
                     </div>
@@ -466,7 +429,9 @@
                 <i class="fas fa-lightbulb"></i>
                 <h3>Recommended Changes to Improve Eligibility</h3>
             </div>
-            <p class="cf-subtitle">These changes could reduce your risk from <strong>{{ cf_original_prob }}</strong> → <strong>{{ cf_new_prob }}</strong></p>
+            <p class="cf-subtitle">These changes could reduce your risk from <strong>{{ cf_original_prob }}</strong> →
+                <strong>{{ cf_new_prob }}</strong>
+            </p>
             <div class="factors-table-wrap">
                 <table class="factors-table cf-table">
                     <thead>
@@ -523,79 +488,391 @@
 
 <!-- XAI Results Styles -->
 <style>
-.xai-results-container{margin-top:2rem;animation:fadeInUp .6s ease}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.xai-card{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.8rem;margin-bottom:1.5rem;box-shadow:0 8px 32px rgba(0,0,0,.3)}
-.xai-card-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:1px solid rgba(255,255,255,.08)}
-.xai-card-header i{font-size:1.4rem;color:#818cf8}
-.xai-card-header h3{margin:0;font-size:1.15rem;color:#e2e8f0;font-weight:600}
-.prediction-content{text-align:center}
-.prediction-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 2rem;border-radius:50px;font-size:1.2rem;font-weight:700;margin-bottom:1.2rem}
-.prediction-badge.approved{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.3)}
-.prediction-badge.rejected{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
-.risk-meter{max-width:400px;margin:0 auto}
-.risk-label{display:flex;justify-content:space-between;margin-bottom:.5rem;color:#94a3b8;font-size:.9rem}
-.progress-bar{height:10px;background:#2d2d3d;border-radius:10px;overflow:hidden}
-.progress-fill{height:100%;border-radius:10px;transition:width 1.2s ease}
-/* Health Score */
-.health-content{display:flex;gap:2rem;align-items:center;flex-wrap:wrap}
-.health-main{display:flex;flex-direction:column;align-items:center;min-width:140px}
-.health-circle{position:relative;width:120px;height:120px}
-.health-circle svg{width:100%;height:100%}
-.health-score-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
-.score-num{font-size:1.8rem;font-weight:800;color:#e2e8f0}
-.score-label{display:block;font-size:.7rem;color:#64748b}
-.health-grade{margin-top:.5rem;padding:.3rem 1rem;border-radius:20px;font-weight:700;font-size:.85rem}
-.grade-good{background:rgba(16,185,129,.15);color:#34d399}
-.grade-fair{background:rgba(245,158,11,.15);color:#fbbf24}
-.grade-poor{background:rgba(239,68,68,.15);color:#f87171}
-.health-breakdown{flex:1;min-width:250px}
-.breakdown-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
-.breakdown-label{width:140px;font-size:.85rem;color:#94a3b8;flex-shrink:0}
-.breakdown-bar-wrap{flex:1;height:8px;background:#2d2d3d;border-radius:8px;overflow:hidden}
-.breakdown-bar{height:100%;border-radius:8px;transition:width 1s ease}
-.breakdown-score{width:35px;text-align:right;font-size:.85rem;color:#e2e8f0;font-weight:600}
-/* Factors Table */
-.factors-table-wrap{overflow-x:auto}
-.factors-table{width:100%;border-collapse:collapse;font-size:.88rem}
-.factors-table th{padding:.7rem .6rem;text-align:left;color:#818cf8;font-weight:600;border-bottom:2px solid rgba(129,140,248,.2);white-space:nowrap}
-.factors-table td{padding:.65rem .6rem;border-bottom:1px solid rgba(255,255,255,.05);color:#cbd5e1}
-.factors-table code{background:rgba(129,140,248,.1);padding:.15rem .4rem;border-radius:4px;font-size:.82rem;color:#a5b4fc}
-.row-risk td:first-child{border-left:3px solid #ef4444}
-.row-safe td:first-child{border-left:3px solid #10b981}
-/* Counterfactual */
-.cf-subtitle{color:#94a3b8;font-size:.9rem;margin-bottom:1rem}
-.cf-subtitle strong{color:#818cf8}
-.val-suggested{color:#34d399;font-weight:600}
-.effort-badge{padding:.2rem .6rem;border-radius:12px;font-size:.78rem;font-weight:600}
-.effort-easy{background:rgba(16,185,129,.15);color:#34d399}
-.effort-moderate{background:rgba(245,158,11,.15);color:#fbbf24}
-.effort-significant{background:rgba(239,68,68,.15);color:#f87171}
-/* NLP Card */
-.nlp-content{color:#cbd5e1;line-height:1.7;font-size:.92rem;padding:1rem;background:rgba(0,0,0,.2);border-radius:10px;border:1px solid rgba(255,255,255,.05)}
-/* Actions */
-.xai-actions{display:flex;gap:1rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
-.xai-actions .btn{padding:.7rem 1.5rem;border-radius:10px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:all .3s}
-.xai-actions .btn-primary{background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff}
-.xai-actions .btn-secondary{background:rgba(255,255,255,.06);color:#94a3b8;border:1px solid rgba(255,255,255,.1)}
-.xai-actions .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(99,102,241,.3)}
-@media(max-width:640px){.health-content{flex-direction:column}.breakdown-label{width:110px}.factors-table{font-size:.8rem}}
+    .xai-results-container {
+        margin-top: 2rem;
+        animation: fadeInUp .6s ease
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px)
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    }
+
+    .xai-card {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border: 1px solid rgba(255, 255, 255, .08);
+        border-radius: 16px;
+        padding: 1.8rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, .3)
+    }
+
+    .xai-card-header {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        margin-bottom: 1.2rem;
+        padding-bottom: .8rem;
+        border-bottom: 1px solid rgba(255, 255, 255, .08)
+    }
+
+    .xai-card-header i {
+        font-size: 1.4rem;
+        color: #818cf8
+    }
+
+    .xai-card-header h3 {
+        margin: 0;
+        font-size: 1.15rem;
+        color: #e2e8f0;
+        font-weight: 600
+    }
+
+    .prediction-content {
+        text-align: center
+    }
+
+    .prediction-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .8rem 2rem;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 1.2rem
+    }
+
+    .prediction-badge.approved {
+        background: rgba(16, 185, 129, .15);
+        color: #34d399;
+        border: 1px solid rgba(16, 185, 129, .3)
+    }
+
+    .prediction-badge.rejected {
+        background: rgba(239, 68, 68, .15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, .3)
+    }
+
+    .risk-meter {
+        max-width: 400px;
+        margin: 0 auto
+    }
+
+    .risk-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: .5rem;
+        color: #94a3b8;
+        font-size: .9rem
+    }
+
+    .progress-bar {
+        height: 10px;
+        background: #2d2d3d;
+        border-radius: 10px;
+        overflow: hidden
+    }
+
+    .progress-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 1.2s ease
+    }
+
+    /* Health Score */
+    .health-content {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        flex-wrap: wrap
+    }
+
+    .health-main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 140px
+    }
+
+    .health-circle {
+        position: relative;
+        width: 120px;
+        height: 120px
+    }
+
+    .health-circle svg {
+        width: 100%;
+        height: 100%
+    }
+
+    .health-score-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center
+    }
+
+    .score-num {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #e2e8f0
+    }
+
+    .score-label {
+        display: block;
+        font-size: .7rem;
+        color: #64748b
+    }
+
+    .health-grade {
+        margin-top: .5rem;
+        padding: .3rem 1rem;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: .85rem
+    }
+
+    .grade-good {
+        background: rgba(16, 185, 129, .15);
+        color: #34d399
+    }
+
+    .grade-fair {
+        background: rgba(245, 158, 11, .15);
+        color: #fbbf24
+    }
+
+    .grade-poor {
+        background: rgba(239, 68, 68, .15);
+        color: #f87171
+    }
+
+    .health-breakdown {
+        flex: 1;
+        min-width: 250px
+    }
+
+    .breakdown-row {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        margin-bottom: .6rem
+    }
+
+    .breakdown-label {
+        width: 140px;
+        font-size: .85rem;
+        color: #94a3b8;
+        flex-shrink: 0
+    }
+
+    .breakdown-bar-wrap {
+        flex: 1;
+        height: 8px;
+        background: #2d2d3d;
+        border-radius: 8px;
+        overflow: hidden
+    }
+
+    .breakdown-bar {
+        height: 100%;
+        border-radius: 8px;
+        transition: width 1s ease
+    }
+
+    .breakdown-score {
+        width: 35px;
+        text-align: right;
+        font-size: .85rem;
+        color: #e2e8f0;
+        font-weight: 600
+    }
+
+    /* Factors Table */
+    .factors-table-wrap {
+        overflow-x: auto
+    }
+
+    .factors-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .88rem
+    }
+
+    .factors-table th {
+        padding: .7rem .6rem;
+        text-align: left;
+        color: #818cf8;
+        font-weight: 600;
+        border-bottom: 2px solid rgba(129, 140, 248, .2);
+        white-space: nowrap
+    }
+
+    .factors-table td {
+        padding: .65rem .6rem;
+        border-bottom: 1px solid rgba(255, 255, 255, .05);
+        color: #cbd5e1
+    }
+
+    .factors-table code {
+        background: rgba(129, 140, 248, .1);
+        padding: .15rem .4rem;
+        border-radius: 4px;
+        font-size: .82rem;
+        color: #a5b4fc
+    }
+
+    .row-risk td:first-child {
+        border-left: 3px solid #ef4444
+    }
+
+    .row-safe td:first-child {
+        border-left: 3px solid #10b981
+    }
+
+    /* Counterfactual */
+    .cf-subtitle {
+        color: #94a3b8;
+        font-size: .9rem;
+        margin-bottom: 1rem
+    }
+
+    .cf-subtitle strong {
+        color: #818cf8
+    }
+
+    .val-suggested {
+        color: #34d399;
+        font-weight: 600
+    }
+
+    .effort-badge {
+        padding: .2rem .6rem;
+        border-radius: 12px;
+        font-size: .78rem;
+        font-weight: 600
+    }
+
+    .effort-easy {
+        background: rgba(16, 185, 129, .15);
+        color: #34d399
+    }
+
+    .effort-moderate {
+        background: rgba(245, 158, 11, .15);
+        color: #fbbf24
+    }
+
+    .effort-significant {
+        background: rgba(239, 68, 68, .15);
+        color: #f87171
+    }
+
+    /* NLP Card */
+    .nlp-content {
+        color: #cbd5e1;
+        line-height: 1.7;
+        font-size: .92rem;
+        padding: 1rem;
+        background: rgba(0, 0, 0, .2);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, .05)
+    }
+
+    /* Actions */
+    .xai-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1rem;
+        flex-wrap: wrap
+    }
+
+    .xai-actions .btn {
+        padding: .7rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        transition: all .3s
+    }
+
+    .xai-actions .btn-primary {
+        background: linear-gradient(135deg, #6366f1, #818cf8);
+        color: #fff
+    }
+
+    .xai-actions .btn-secondary {
+        background: rgba(255, 255, 255, .06);
+        color: #94a3b8;
+        border: 1px solid rgba(255, 255, 255, .1)
+    }
+
+    .xai-actions .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, .3)
+    }
+
+    @media(max-width:640px) {
+        .health-content {
+            flex-direction: column
+        }
+
+        .breakdown-label {
+            width: 110px
+        }
+
+        .factors-table {
+            font-size: .8rem
+        }
+    }
 </style>
 
 <!-- Form Validation Script -->
 <script>
-document.getElementById('loanForm').addEventListener('submit', function(e) {
-    const age = document.getElementById('age').value;
-    const income = document.getElementById('income').value;
-    const creditScore = document.getElementById('creditScore').value;
-    if (age < 18 || age > 69) { e.preventDefault(); alert('Age must be between 18 and 69 years'); }
-    if (income < 200000) { e.preventDefault(); alert('Annual income must be at least ₹2,00,000'); }
-    if (creditScore < 0 || creditScore > 1000) { e.preventDefault(); alert('Credit score must be between 0 and 1000'); }
-});
-{% if prediction %}
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('xaiResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
-});
-{% endif %}
+    document.getElementById('loanForm').addEventListener('submit', function (e) {
+        const age = parseInt(document.getElementById('age').value);
+        const income = parseInt(document.getElementById('income').value);
+        const loanAmount = parseInt(document.getElementById('loanAmount').value);
+        const creditScore = parseInt(document.getElementById('creditScore').value);
+        const monthsEmployed = parseInt(document.getElementById('monthsEmployed').value);
+        const numCreditLines = parseInt(document.getElementById('numCreditLines').value);
+        const interestRate = parseFloat(document.getElementById('interestRate').value);
+        const loanTerm = parseInt(document.getElementById('loanTerm').value);
+        const dtiRatio = parseFloat(document.getElementById('dtiRatio').value);
+
+        let err = "";
+        if (age < 18 || age > 69) err = 'Age must be between 18 and 69 years';
+        else if (income < 15000 || income > 150000) err = 'Income must be between $ 15,000 and 150,000';
+        else if (loanAmount < 1000 || loanAmount > 250000) err = 'Loan Amount must be between $ 1,000 and 250,000';
+        else if (creditScore < 300 || creditScore > 850) err = 'Credit score must be between 300 and 850';
+        else if (monthsEmployed < 0) err = 'Months Employed must be more than 0';
+        else if (numCreditLines < 0 || numCreditLines > 4) err = 'Number of Credit Lines must be between 1 and 4';
+        else if (interestRate < 2.0 || interestRate > 25.0) err = 'Interest Rate must be between 2.0% and 25.0%';
+        else if (loanTerm < 12 || loanTerm > 60) err = 'Loan Term must be between 12 and 60 months';
+        else if (dtiRatio < 0.0 || dtiRatio > 1.0) err = 'DTI Ratio must be between 0.1 and 0.9';
+
+        if (err) {
+            e.preventDefault();
+            alert(err);
+        }
+    });
+    {% if prediction %}
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('xaiResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    {% endif %}
 </script>
 {% endblock %}
