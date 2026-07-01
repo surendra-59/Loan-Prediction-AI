@@ -48,7 +48,7 @@ FEATURE_BOUNDS = {
 CHANGE_DIRECTION = {
     'Income':         'increase',
     'LoanAmount':     'decrease',
-    'LoanTerm':       'decrease',
+    'LoanTerm':       'both',
     'MonthsEmployed': 'increase',
     'DTIRatio':       'decrease',
 }
@@ -193,11 +193,8 @@ def find_counterfactual(
         opt_bounds.append((lo, hi))
 
     # Scale factors for normalizing distances (range of each actionable feature)
-    scales = np.array([
-        FEATURE_BOUNDS.get(f, (0, 1))[1] - FEATURE_BOUNDS.get(f, (0, 1))[0]
-        for f in actionable_features
-    ], dtype=float)
-    scales[scales == 0] = 1.0  # avoid division by zero
+    scales = np.array([hi - lo for lo, hi in opt_bounds], dtype=float)
+    scales[scales <= 0] = 1.0  # avoid division by zero
 
     orig_actionable = original[act_idx]
 
@@ -260,8 +257,14 @@ def find_counterfactual(
     for feat, old_val, new_val in zip(actionable_features, orig_actionable, result.x):
         change = new_val - old_val
         pct = (change / old_val * 100) if old_val != 0 else float('inf')
-        # Only report meaningful changes: >1% change AND >10 absolute for dollar features
-        abs_threshold = 10.0 if feat in ('Income', 'LoanAmount') else 0.5
+        # Only report meaningful changes: >1% change AND appropriate absolute change
+        if feat in ('Income', 'LoanAmount'):
+            abs_threshold = 10.0
+        elif feat == 'DTIRatio':
+            abs_threshold = 0.01  # 1% absolute ratio change
+        else:
+            abs_threshold = 0.5
+            
         if abs(change) > abs_threshold and abs(pct) > 1.0:
             changes_data.append({
                 'Feature':   feat,

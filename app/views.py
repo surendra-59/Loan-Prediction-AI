@@ -501,9 +501,9 @@ def apply_loan(request):
                                 sugg_str = f"{sugg:.0%}"
                                 chg_str = f"{chg:+.0%}"
                             else:
-                                orig_str = f"{orig:.1f}"
-                                sugg_str = f"{sugg:.1f}"
-                                chg_str = f"{chg:+.1f}"
+                                orig_str = f"{orig:.0f}"
+                                sugg_str = f"{sugg:.0f}"
+                                chg_str = f"{chg:+.0f}"
                             
                             if abs(pct) < 10:
                                 effort = 'Easy'
