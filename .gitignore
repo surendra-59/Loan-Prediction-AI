@@ -2,3 +2,5 @@
 .env
 venv/
 .venv/
+notes.md
+Notes.md
