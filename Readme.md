@@ -4,6 +4,8 @@
 ![Django](https://img.shields.io/badge/Django-6.0.2-green)
 ![CatBoost](https://img.shields.io/badge/CatBoost-1.2.10-yellow)
 
+[**📄 View Full Project Report**](./Project%20Report/Project%20Report.docx)
+
 A modern, machine-learning-powered web application designed to automate and explain loan approval decisions using advanced predictive modeling and Explainable AI (XAI).
 
 ---
@@ -60,6 +62,7 @@ Loan_Prediction_System/
 ├── static/                     # CSS, JS, and image assets
 ├── media/                      # Uploaded files (KYC documents, photos)
 ├── Screenshots/                # UI showcases and architecture diagrams
+├── Project Report/             # Project report documents
 │
 ├── cat_model.pkl               # Serialized trained CatBoost model
 ├── loan_explainer.py           # Core XAI logic (SHAP & Counterfactual generation)
