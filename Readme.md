@@ -5,6 +5,7 @@
 ![CatBoost](https://img.shields.io/badge/CatBoost-1.2.10-yellow)
 
 [**📄 View Full Project Report**](./Project%20Report/Project%20Report.docx)
+[**View Model Training Part**](https://github.com/surendra-59/Loan-Prediction)
 
 A modern, machine-learning-powered web application designed to automate and explain loan approval decisions using advanced predictive modeling and Explainable AI (XAI).
 
